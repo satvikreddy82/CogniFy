@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { supabase } from '../utils/supabase';
 import { mockStore, isSupabaseConfigured } from '../utils/mockStore';
@@ -6,7 +6,7 @@ import { mockStore, isSupabaseConfigured } from '../utils/mockStore';
 const router = Router();
 
 // GET /api/v1/notifications
-router.get('/', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -32,7 +32,7 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // PATCH /api/v1/notifications/:id/read
-router.patch('/:id/read', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/:id/read', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -54,7 +54,7 @@ router.patch('/:id/read', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // PATCH /api/v1/notifications/mark-all-read
-router.patch('/mark-all-read', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/mark-all-read', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {

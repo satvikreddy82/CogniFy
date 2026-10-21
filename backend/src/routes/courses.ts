@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -16,7 +16,7 @@ const courseSchema = z.object({
 });
 
 // GET /api/v1/courses
-router.get('/', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -58,7 +58,7 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // GET /api/v1/courses/:courseId
-router.get('/:courseId', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/:courseId', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -83,7 +83,7 @@ router.get('/:courseId', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // POST /api/v1/courses
-router.post('/', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res, next) => {
+router.post('/', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = courseSchema.parse(req.body);
     const normalizedCode = input.code.trim().toUpperCase();
@@ -157,7 +157,7 @@ router.post('/', authenticate, authorize(['faculty', 'admin']), async (req: Auth
 });
 
 // GET /api/v1/courses/:courseId/outcomes
-router.get('/:courseId/outcomes', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/:courseId/outcomes', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -179,7 +179,7 @@ router.get('/:courseId/outcomes', authenticate, async (req: AuthRequest, res, ne
 });
 
 // POST /api/v1/courses/:courseId/outcomes
-router.post('/:courseId/outcomes', authenticate, authorize(['faculty']), async (req: AuthRequest, res, next) => {
+router.post('/:courseId/outcomes', authenticate, authorize(['faculty']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       code: z.string().min(2),
@@ -213,7 +213,7 @@ router.post('/:courseId/outcomes', authenticate, authorize(['faculty']), async (
 });
 
 // DELETE /api/v1/courses/:courseId — Safe deletion with academic record protection
-router.delete('/:courseId', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res, next) => {
+router.delete('/:courseId', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const courseId = req.params.courseId;
 

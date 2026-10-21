@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -36,7 +36,7 @@ function parseCsv(text: string): string[][] {
 }
 
 // ─── GET /api/v1/assessments/overview — Real Dashboard CO Attainment Overview ─
-router.get('/overview', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/overview', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // Check if any assessments exist
     let assessments = [...mockStore.assessments];
@@ -117,7 +117,7 @@ router.get('/overview', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // ─── GET /api/v1/assessments?paper_id= ─────────────────────────────────────────
-router.get('/', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { paper_id } = req.query as Record<string, string>;
 
@@ -139,7 +139,7 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // ─── POST /api/v1/assessments/upload-csv & /:paperId/upload-csv ───────────────
-const uploadCsvHandler = async (req: AuthRequest, res: any, next: any) => {
+const uploadCsvHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const paperId = req.params.paperId || req.body.paper_id;
     const csvContent = req.body.csv_content || req.body.csv_text;
@@ -393,7 +393,7 @@ router.post('/upload-csv', authenticate, authorize(['faculty']), uploadCsvHandle
 router.post('/:paperId/upload-csv', authenticate, authorize(['faculty']), uploadCsvHandler);
 
 // ─── POST /api/v1/assessments/:paperId/marks ──────────────────────────────────
-router.post('/:paperId/marks', authenticate, authorize(['faculty']), async (req: AuthRequest, res, next) => {
+router.post('/:paperId/marks', authenticate, authorize(['faculty']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       marks: z.array(
@@ -451,7 +451,7 @@ router.post('/:paperId/marks', authenticate, authorize(['faculty']), async (req:
 });
 
 // ─── GET /api/v1/assessments/:paperId/analytics — Real CO Attainment Analytics ─
-router.get('/:paperId/analytics', authenticate, async (req, res, next) => {
+router.get('/:paperId/analytics', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const paperId = req.params.paperId;
 

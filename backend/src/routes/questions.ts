@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -114,12 +114,12 @@ function extractQuestionsFromText(rawText: string, defaultCourseName: string, de
 }
 
 // ─── GET /api/v1/questions/banks — List all uploaded question banks / PDF sets
-router.get('/banks', authenticate, async (req: AuthRequest, res) => {
+router.get('/banks', authenticate, async (req: AuthRequest, res: Response) => {
   res.json(mockStore.questionBanks || []);
 });
 
 // ─── POST /api/v1/questions/upload-bank — Upload PDF / JPEG / Document Question Bank
-router.post('/upload-bank', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res, next) => {
+router.post('/upload-bank', authenticate, authorize(['faculty', 'admin']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const {
       title,

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -11,7 +11,7 @@ const router = Router();
 router.use(authenticate, authorize(['admin']));
 
 // GET /api/v1/admin/dean-applications
-router.get('/dean-applications', async (_req, res, next) => {
+router.get('/dean-applications', async (_req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -50,7 +50,7 @@ router.get('/dean-applications', async (_req, res, next) => {
 });
 
 // POST /api/v1/admin/dean-applications/:id/decide
-router.post('/dean-applications/:id/decide', async (req: AuthRequest, res, next) => {
+router.post('/dean-applications/:id/decide', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       decision: z.enum(['approved', 'rejected']),
@@ -116,7 +116,7 @@ router.post('/dean-applications/:id/decide', async (req: AuthRequest, res, next)
 });
 
 // GET /api/v1/admin/users
-router.get('/users', async (_req, res, next) => {
+router.get('/users', async (_req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -136,7 +136,7 @@ router.get('/users', async (_req, res, next) => {
 });
 
 // PATCH /api/v1/admin/users/:id/status
-router.patch('/users/:id/status', async (req: AuthRequest, res, next) => {
+router.patch('/users/:id/status', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       is_active: z.boolean(),
@@ -176,7 +176,7 @@ router.patch('/users/:id/status', async (req: AuthRequest, res, next) => {
 });
 
 // GET /api/v1/admin/departments
-router.get('/departments', async (_req, res) => {
+router.get('/departments', async (_req: AuthRequest, res: Response) => {
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase.from('departments').select('*').order('name');
@@ -187,7 +187,7 @@ router.get('/departments', async (_req, res) => {
 });
 
 // POST /api/v1/admin/departments
-router.post('/departments', async (req: AuthRequest, res, next) => {
+router.post('/departments', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({ name: z.string().min(2) }).parse(req.body);
     const newDept = {
@@ -203,7 +203,7 @@ router.post('/departments', async (req: AuthRequest, res, next) => {
 });
 
 // GET /api/v1/admin/audit-logs
-router.get('/audit-logs', async (req, res) => {
+router.get('/audit-logs', async (req: AuthRequest, res: Response) => {
   const { limit = '50', offset = '0' } = req.query as Record<string, string>;
   const parsedLimit = parseInt(limit) || 50;
   const parsedOffset = parseInt(offset) || 0;

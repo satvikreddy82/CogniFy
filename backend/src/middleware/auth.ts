@@ -3,14 +3,33 @@ import jwt from 'jsonwebtoken';
 import { supabase } from '../utils/supabase';
 import { mockStore, isSupabaseConfigured } from '../utils/mockStore';
 
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-    department_id?: string;
-    email?: string;
-    full_name?: string;
-  };
+import type { ParamsDictionary } from 'express-serve-static-core';
+import type { ParsedQs } from 'qs';
+
+export interface AuthUser {
+  id: string;
+  role: string;
+  department_id?: string;
+  email?: string;
+  full_name?: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthUser;
+    }
+  }
+}
+
+export interface AuthRequest<
+  P = ParamsDictionary,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = ParsedQs,
+  Locals extends Record<string, any> = Record<string, any>
+> extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
+  user?: AuthUser;
 }
 
 export const authenticate = async (

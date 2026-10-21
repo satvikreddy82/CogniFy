@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -42,7 +42,7 @@ const paperConfigSchema = z.object({
 });
 
 // GET /api/v1/papers/ai/health — Gemini connectivity probe (no API key in response)
-router.get('/ai/health', authenticate, async (_req, res, next) => {
+router.get('/ai/health', authenticate, async (_req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const result = await geminiService.healthCheck();
     return res.status(result.ok ? 200 : 503).json({
@@ -58,7 +58,7 @@ router.get('/ai/health', authenticate, async (_req, res, next) => {
 });
 
 // GET /api/v1/papers
-router.get('/', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -88,7 +88,7 @@ router.get('/', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // GET /api/v1/papers/:paperId
-router.get('/:paperId', authenticate, async (req, res, next) => {
+router.get('/:paperId', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -117,7 +117,7 @@ router.get('/:paperId', authenticate, async (req, res, next) => {
 });
 
 // POST /api/v1/papers/generate — Real Gemini AI paper generation
-router.post('/generate', authenticate, authorize(['faculty']), async (req: AuthRequest, res, next) => {
+router.post('/generate', authenticate, authorize(['faculty']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const config = paperConfigSchema.parse(req.body);
     const { course_name, course_code, syllabus, sections, total_marks, duration_minutes, title } = config;
@@ -314,7 +314,7 @@ router.post('/generate', authenticate, authorize(['faculty']), async (req: AuthR
 });
 
 // GET /api/v1/papers/:paperId/validate — Deterministic OBE Validator
-router.get('/:paperId/validate', authenticate, async (req, res, next) => {
+router.get('/:paperId/validate', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const paper = mockStore.papers.find((p) => p.id === req.params.paperId);
     if (!paper) return res.status(404).json({ error: 'Paper not found' });
@@ -389,7 +389,7 @@ router.get('/:paperId/validate', authenticate, async (req, res, next) => {
 });
 
 // POST /api/v1/papers/:paperId/submit — Faculty submits for Dean review
-router.post('/:paperId/submit', authenticate, authorize(['faculty']), async (req: AuthRequest, res, next) => {
+router.post('/:paperId/submit', authenticate, authorize(['faculty']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const paper = mockStore.papers.find((p) => p.id === req.params.paperId);
     if (!paper) return res.status(404).json({ error: 'Paper not found' });
@@ -428,7 +428,7 @@ router.post('/:paperId/submit', authenticate, authorize(['faculty']), async (req
 });
 
 // POST /api/v1/papers/:paperId/approve — Dean approves or requests changes
-router.post('/:paperId/approve', authenticate, authorize(['dean']), async (req: AuthRequest, res, next) => {
+router.post('/:paperId/approve', authenticate, authorize(['dean']), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       decision: z.enum(['approved', 'rejected', 'changes_requested']),

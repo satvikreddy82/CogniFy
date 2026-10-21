@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import {
@@ -36,7 +36,7 @@ const authLimiter = rateLimit({
 });
 
 // ─── POST /api/v1/auth/login ──────────────────────────────────────────────────
-router.post('/login', authLimiter, async (req, res, next) => {
+router.post('/login', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const input = loginSchema.parse(req.body);
     const result = await loginUser(input);
@@ -50,7 +50,7 @@ router.post('/login', authLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/v1/auth/register/faculty ───────────────────────────────────────
-router.post('/register/faculty', authLimiter, async (req, res, next) => {
+router.post('/register/faculty', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const input = registerFacultySchema.parse(req.body);
     const result = await registerFaculty(input);
@@ -64,7 +64,7 @@ router.post('/register/faculty', authLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/v1/auth/register/dean ─────────────────────────────────────────
-router.post('/register/dean', authLimiter, async (req, res, next) => {
+router.post('/register/dean', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const input = registerDeanSchema.parse(req.body);
     const result = await registerDean(input);
@@ -78,7 +78,7 @@ router.post('/register/dean', authLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/v1/auth/request-otp ────────────────────────────────────────────
-router.post('/request-otp', authLimiter, async (req, res, next) => {
+router.post('/request-otp', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email } = requestOtpSchema.parse(req.body);
     const result = await requestPasswordOtp(email);
@@ -92,7 +92,7 @@ router.post('/request-otp', authLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/v1/auth/verify-otp ─────────────────────────────────────────────
-router.post('/verify-otp', authLimiter, async (req, res, next) => {
+router.post('/verify-otp', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, otp } = verifyOtpSchema.parse(req.body);
     const result = await verifyPasswordOtp(email, otp);
@@ -106,7 +106,7 @@ router.post('/verify-otp', authLimiter, async (req, res, next) => {
 });
 
 // ─── POST /api/v1/auth/reset-password ─────────────────────────────────────────
-router.post('/reset-password', authLimiter, async (req, res, next) => {
+router.post('/reset-password', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, otp, password } = resetPasswordSchema.parse(req.body);
     // Forward session tokens if the client sent them from the verify-otp step
@@ -124,7 +124,7 @@ router.post('/reset-password', authLimiter, async (req, res, next) => {
 });
 
 // ─── GET /api/v1/auth/profile ─────────────────────────────────────────────────
-router.get('/profile', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/profile', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       const { data, error } = await supabase
@@ -171,7 +171,7 @@ router.get('/profile', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // ─── PATCH /api/v1/auth/profile ───────────────────────────────────────────────
-router.patch('/profile', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/profile', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = updateProfileSchema.parse(req.body);
 
@@ -239,7 +239,7 @@ router.patch('/profile', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // ─── GET /api/v1/auth/registration-status ─────────────────────────────────────
-router.get('/registration-status', authenticate, async (req: AuthRequest, res) => {
+router.get('/registration-status', authenticate, async (req: AuthRequest, res: Response) => {
   const mockProfile = mockStore.profiles.find((p) => p.id === req.user!.id);
   res.json({
     status: mockProfile?.status || 'approved',
@@ -250,7 +250,7 @@ router.get('/registration-status', authenticate, async (req: AuthRequest, res) =
 
 // ─── GET /api/v1/auth/departments ─────────────────────────────────────────────
 // Public endpoint so registration forms can list all 14 departments
-router.get('/departments', async (_req, res) => {
+router.get('/departments', async (_req: Request, res: Response) => {
   if (isSupabaseConfigured()) {
     try {
       const { data, error } = await supabase

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authorize } from '../middleware/role';
@@ -11,7 +11,7 @@ const router = Router();
 router.use(authenticate, authorize(['dean', 'admin']));
 
 // GET /api/v1/dean/faculty-applications
-router.get('/faculty-applications', async (req: AuthRequest, res, next) => {
+router.get('/faculty-applications', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (isSupabaseConfigured()) {
       try {
@@ -62,7 +62,7 @@ router.get('/faculty-applications', async (req: AuthRequest, res, next) => {
 });
 
 // POST /api/v1/dean/faculty-applications/:id/decide
-router.post('/faculty-applications/:id/decide', async (req: AuthRequest, res, next) => {
+router.post('/faculty-applications/:id/decide', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const input = z.object({
       decision: z.enum(['approved', 'rejected']),
@@ -125,7 +125,7 @@ router.post('/faculty-applications/:id/decide', async (req: AuthRequest, res, ne
 });
 
 // GET /api/v1/dean/analytics
-router.get('/analytics', async (req: AuthRequest, res) => {
+router.get('/analytics', async (req: AuthRequest, res: Response) => {
   const deptId = req.user!.department_id;
   const facultyMembers = mockStore.profiles.filter((p) => p.role === 'faculty' && (!deptId || p.department_id === deptId));
 
