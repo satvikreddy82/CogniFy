@@ -1,0 +1,648 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   CogniFy Global Styles + Nine-Palette Theme System
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties — Theme A (Orange + Navy) — DEFAULT ──────────── */
+:root {
+  --primary:        #FF6B00;
+  --primary-hover:  #E05A00;
+  --primary-light:  #FFF0E5;
+  --secondary:      #102A43;
+  --accent:         #FF6B00;
+
+  --surface:        #FFFFFF;
+  --surface-2:      #F8F9FA;
+  --surface-3:      #F0F2F5;
+  --surface-card:   #FFFFFF;
+  --surface-sidebar:#102A43;
+
+  --border:         #E2E8F0;
+  --border-strong:  #CBD5E0;
+
+  --text-default:   #0F172A;
+  --text-muted:     #64748B;
+  --text-light:     #94A3B8;
+  --text-on-primary:#FFFFFF;
+  --text-on-sidebar:#CBD5E0;
+  --text-sidebar-active: #FF6B00;
+
+  --ring:           #FF6B00;
+  --error:          #DC2626;
+  --warning:        #D97706;
+  --success:        #059669;
+  --info:           #0284C7;
+
+  --radius:         8px;
+  --radius-sm:      4px;
+  --radius-lg:      12px;
+
+  --shadow-sm:      0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow:         0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:      0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Chart colours */
+  --chart-1: #FF6B00;
+  --chart-2: #102A43;
+  --chart-3: #38BDF8;
+  --chart-4: #A3E635;
+  --chart-5: #F472B6;
+  --chart-6: #FBBF24;
+}
+
+/* ─── Theme B — Emerald + Gold ───────────────────────────────────────────── */
+[data-theme="theme-b"] {
+  --primary:        #047857;
+  --primary-hover:  #065F46;
+  --primary-light:  #ECFDF5;
+  --secondary:      #D4AF37;
+  --accent:         #D4AF37;
+
+  --surface-sidebar:#064E3B;
+  --text-sidebar-active: #D4AF37;
+
+  --chart-1: #047857;
+  --chart-2: #D4AF37;
+  --chart-3: #10B981;
+  --chart-4: #F59E0B;
+  --chart-5: #6EE7B7;
+  --chart-6: #FDE68A;
+}
+
+/* ─── Theme C — Golden Yellow + Electric Violet + Soft Ivory ─────────────── */
+[data-theme="theme-c"] {
+  --primary:        #7357D8;
+  --primary-hover:  #5B42C3;
+  --primary-light:  #EDE9FF;
+  --secondary:      #FFD84D;
+  --accent:         #FFD84D;
+
+  --surface:        #F8F7F2;
+  --surface-2:      #F0EFE8;
+  --surface-3:      #E8E7DE;
+  --surface-card:   #FFFFFF;
+  --surface-sidebar:#3B2D8A;
+
+  --text-on-sidebar:#E9E4FF;
+  --text-sidebar-active: #FFD84D;
+
+  --chart-1: #7357D8;
+  --chart-2: #FFD84D;
+  --chart-3: #A78BFA;
+  --chart-4: #FDE68A;
+  --chart-5: #C4B5FD;
+  --chart-6: #FCA5A5;
+}
+
+/* ─── Theme D — Deep Green + Blush Pink + Warm Ivory ─────────────────────── */
+[data-theme="theme-d"] {
+  --primary:        #315C4C;
+  --primary-hover:  #224038;
+  --primary-light:  #E8F5F0;
+  --secondary:      #F2A7B5;
+  --accent:         #F2A7B5;
+
+  --surface:        #FFF7E8;
+  --surface-2:      #FFF0D5;
+  --surface-3:      #FFE8C0;
+  --surface-card:   #FFFFFF;
+  --surface-sidebar:#1E3D31;
+
+  --text-on-sidebar:#C8E6DA;
+  --text-sidebar-active: #F2A7B5;
+
+  --chart-1: #315C4C;
+  --chart-2: #F2A7B5;
+  --chart-3: #4CAF85;
+  --chart-4: #FBBF80;
+  --chart-5: #A8D8B0;
+  --chart-6: #FDA4B4;
+}
+
+/* ─── Theme E — Royal Plum + Mint Mist + Vanilla Cream ──────────────────── */
+[data-theme="theme-e"] {
+  --primary:        #593C8F;
+  --primary-hover:  #432D6E;
+  --primary-light:  #EDE9F8;
+  --secondary:      #A8D5BA;
+  --accent:         #A8D5BA;
+
+  --surface:        #FAF6EE;
+  --surface-2:      #F2EDE3;
+  --surface-3:      #EAE4D8;
+  --surface-card:   #FFFFFF;
+  --surface-sidebar:#3B2469;
+
+  --text-on-sidebar:#D4C8F5;
+  --text-sidebar-active: #A8D5BA;
+
+  --chart-1: #593C8F;
+  --chart-2: #A8D5BA;
+  --chart-3: #8B6CC7;
+  --chart-4: #6ECBA0;
+  --chart-5: #C4A8E8;
+  --chart-6: #90D4B8;
+}
+
+/* ─── Theme F — Navy + Cyan ──────────────────────────────────────────────── */
+[data-theme="theme-f"] {
+  --primary:        #00D4FF;
+  --primary-hover:  #00BFEE;
+  --primary-light:  #E0FAFF;
+  --secondary:      #0B1F3A;
+  --accent:         #00D4FF;
+
+  --surface:        #0F2744;
+  --surface-2:      #0B1F3A;
+  --surface-3:      #071629;
+  --surface-card:   #122B50;
+  --surface-sidebar:#071629;
+
+  --border:         #1E3A5F;
+  --border-strong:  #2A5080;
+
+  --text-default:   #E2F4FF;
+  --text-muted:     #7EB5D4;
+  --text-light:     #4A8BA8;
+  --text-on-primary:#0B1F3A;
+  --text-on-sidebar:#7EB5D4;
+  --text-sidebar-active: #00D4FF;
+
+  --chart-1: #00D4FF;
+  --chart-2: #0080B8;
+  --chart-3: #40E8FF;
+  --chart-4: #00A8CC;
+  --chart-5: #80ECFF;
+  --chart-6: #006688;
+}
+
+/* ─── Theme G — Charcoal + Electric Blue ────────────────────────────────── */
+[data-theme="theme-g"] {
+  --primary:        #3B82F6;
+  --primary-hover:  #2563EB;
+  --primary-light:  #EFF6FF;
+  --secondary:      #18181B;
+  --accent:         #3B82F6;
+
+  --surface:        #1C1C1F;
+  --surface-2:      #18181B;
+  --surface-3:      #141416;
+  --surface-card:   #242427;
+  --surface-sidebar:#141416;
+
+  --border:         #2E2E33;
+  --border-strong:  #3F3F46;
+
+  --text-default:   #F4F4F5;
+  --text-muted:     #A1A1AA;
+  --text-light:     #71717A;
+  --text-on-primary:#FFFFFF;
+  --text-on-sidebar:#A1A1AA;
+  --text-sidebar-active: #60A5FA;
+
+  --chart-1: #3B82F6;
+  --chart-2: #60A5FA;
+  --chart-3: #93C5FD;
+  --chart-4: #1D4ED8;
+  --chart-5: #BFDBFE;
+  --chart-6: #2563EB;
+}
+
+/* ─── Theme H — Black + Lime ─────────────────────────────────────────────── */
+[data-theme="theme-h"] {
+  --primary:        #B6FF00;
+  --primary-hover:  #9EDF00;
+  --primary-light:  #F4FFD9;
+  --secondary:      #111111;
+  --accent:         #B6FF00;
+
+  --surface:        #161616;
+  --surface-2:      #111111;
+  --surface-3:      #0A0A0A;
+  --surface-card:   #1E1E1E;
+  --surface-sidebar:#0A0A0A;
+
+  --border:         #262626;
+  --border-strong:  #3A3A3A;
+
+  --text-default:   #F5F5F5;
+  --text-muted:     #A3A3A3;
+  --text-light:     #737373;
+  --text-on-primary:#111111;
+  --text-on-sidebar:#A3A3A3;
+  --text-sidebar-active: #B6FF00;
+
+  --chart-1: #B6FF00;
+  --chart-2: #84CC16;
+  --chart-3: #D4FF80;
+  --chart-4: #65A30D;
+  --chart-5: #ECFCCB;
+  --chart-6: #4D7C0F;
+}
+
+/* ─── Theme I — Red + Cream ──────────────────────────────────────────────── */
+[data-theme="theme-i"] {
+  --primary:        #D72638;
+  --primary-hover:  #B91C2D;
+  --primary-light:  #FFF1F2;
+  --secondary:      #1A1A1A;
+  --accent:         #D72638;
+
+  --surface:        #FFF3E0;
+  --surface-2:      #FFE8C0;
+  --surface-3:      #FFDDA0;
+  --surface-card:   #FFFFFF;
+  --surface-sidebar:#1A0A0A;
+
+  --text-on-sidebar:#FFB8B8;
+  --text-sidebar-active: #FF6B7A;
+
+  --chart-1: #D72638;
+  --chart-2: #F97316;
+  --chart-3: #EF4444;
+  --chart-4: #FB923C;
+  --chart-5: #FCA5A5;
+  --chart-6: #FDBA74;
+}
+
+/* ─── Dark Mode Overrides ────────────────────────────────────────────────── */
+.dark {
+  --surface:        #111827;
+  --surface-2:      #0D1421;
+  --surface-3:      #0A1018;
+  --surface-card:   #1F2937;
+  --surface-sidebar:#0D1421;
+
+  --border:         #1F2937;
+  --border-strong:  #374151;
+
+  --text-default:   #F9FAFB;
+  --text-muted:     #9CA3AF;
+  --text-light:     #6B7280;
+
+  --shadow-sm:      0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow:         0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+}
+
+/* Dark overrides for specific themes that are already dark (F, G, H) don't change */
+.dark[data-theme="theme-f"],
+.dark[data-theme="theme-g"],
+.dark[data-theme="theme-h"] {
+  /* These themes are dark by design — keep their base colours */
+}
+
+/* Dark overrides for light-background themes */
+.dark[data-theme="theme-b"] {
+  --surface:       #052E1A;
+  --surface-2:     #031F12;
+  --surface-3:     #01100A;
+  --surface-card:  #063D22;
+}
+
+.dark[data-theme="theme-c"] {
+  --surface:       #1A1528;
+  --surface-2:     #130F1F;
+  --surface-3:     #0C0916;
+  --surface-card:  #221B36;
+}
+
+.dark[data-theme="theme-d"] {
+  --surface:       #1A1008;
+  --surface-2:     #120B04;
+  --surface-3:     #0A0602;
+  --surface-card:  #221508;
+}
+
+.dark[data-theme="theme-e"] {
+  --surface:       #18121E;
+  --surface-2:     #110C18;
+  --surface-3:     #0A0612;
+  --surface-card:  #211628;
+}
+
+.dark[data-theme="theme-i"] {
+  --surface:       #1C0C0C;
+  --surface-2:     #140606;
+  --surface-3:     #0C0202;
+  --surface-card:  #240E0E;
+  --text-default:  #FFF3E0;
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────────────── */
+@layer utilities {
+  .bg-surface     { background-color: var(--surface); }
+  .bg-surface-2   { background-color: var(--surface-2); }
+  .bg-surface-3   { background-color: var(--surface-3); }
+  .bg-card        { background-color: var(--surface-card); }
+  .bg-sidebar     { background-color: var(--surface-sidebar); }
+  .bg-primary     { background-color: var(--primary); }
+  .bg-primary-light { background-color: var(--primary-light); }
+
+  .text-default   { color: var(--text-default); }
+  .text-muted     { color: var(--text-muted); }
+  .text-light     { color: var(--text-light); }
+  .text-primary   { color: var(--primary); }
+  .text-on-primary { color: var(--text-on-primary); }
+  .text-on-sidebar { color: var(--text-on-sidebar); }
+  .text-sidebar-active { color: var(--text-sidebar-active); }
+
+  .border-default { border-color: var(--border); }
+  .border-strong  { border-color: var(--border-strong); }
+  .border-primary { border-color: var(--primary); }
+
+  .shadow-card    { box-shadow: var(--shadow); }
+  .shadow-card-md { box-shadow: var(--shadow-md); }
+  .shadow-card-lg { box-shadow: var(--shadow-lg); }
+
+  .rounded-brand  { border-radius: var(--radius); }
+  .rounded-brand-sm { border-radius: var(--radius-sm); }
+  .rounded-brand-lg { border-radius: var(--radius-lg); }
+
+  .ring-primary   { --tw-ring-color: var(--ring); }
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────────── */
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "cv02","cv03","cv04","cv11";
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--text-default);
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface-2); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+}
+
+/* ─── Component Layer ────────────────────────────────────────────────────── */
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-brand text-sm font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+  }
+
+  .btn-secondary {
+    background-color: var(--surface-3);
+    color: var(--text-default);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--surface-2);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-muted);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--surface-2);
+    color: var(--text-default);
+  }
+
+  .btn-danger {
+    background-color: var(--error);
+    color: #fff;
+  }
+  .btn-danger:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 text-sm rounded-brand border transition-all duration-150;
+    background-color: var(--surface);
+    color: var(--text-default);
+    border-color: var(--border);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  .input::placeholder {
+    color: var(--text-light);
+  }
+  .input.error {
+    border-color: var(--error);
+  }
+
+  .card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-success { background-color: #DCFCE7; color: #166534; }
+  .badge-warning { background-color: #FEF3C7; color: #92400E; }
+  .badge-error   { background-color: #FEE2E2; color: #991B1B; }
+  .badge-info    { background-color: #DBEAFE; color: #1E40AF; }
+  .badge-neutral { background-color: var(--surface-3); color: var(--text-muted); }
+  .badge-primary { background-color: var(--primary-light); color: var(--primary); }
+
+  .dark .badge-success { background-color: #14532D; color: #86EFAC; }
+  .dark .badge-warning { background-color: #451A03; color: #FCD34D; }
+  .dark .badge-error   { background-color: #450A0A; color: #FCA5A5; }
+  .dark .badge-info    { background-color: #1E3A5F; color: #93C5FD; }
+
+  .label {
+    @apply block text-sm font-medium mb-1;
+    color: var(--text-default);
+  }
+
+  .error-msg {
+    @apply text-xs mt-1;
+    color: var(--error);
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-brand text-sm font-medium transition-all duration-150;
+    color: var(--text-on-sidebar);
+  }
+  .sidebar-link:hover {
+    background-color: rgb(255 255 255 / 0.08);
+    color: var(--text-sidebar-active);
+  }
+  .sidebar-link.active {
+    background-color: rgb(255 255 255 / 0.12);
+    color: var(--text-sidebar-active);
+  }
+
+  .stat-card {
+    @apply card p-5 flex flex-col gap-2;
+  }
+
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight;
+    color: var(--text-default);
+  }
+
+  .section-title {
+    @apply text-lg font-semibold;
+    color: var(--text-default);
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 40%, transparent); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.animate-fade-in   { animation: fade-in 200ms ease-out both; }
+.animate-slide-in  { animation: slide-in-left 200ms ease-out both; }
+.animate-pulse-ring{ animation: pulse-ring 2s infinite; }
+
+/* ─── Print & PDF Export Rules ───────────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
+  /* Reset all fixed-height and overflow restrictions that truncate print output */
+  html,
+  body,
+  #root,
+  .h-screen,
+  .overflow-hidden,
+  .overflow-y-auto,
+  main,
+  div {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: static !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide application navigation, topbar, sidebars, buttons, wizards */
+  header,
+  nav,
+  aside,
+  .no-print,
+  button,
+  .btn,
+  .wizard-nav,
+  .alert-banner {
+    display: none !important;
+  }
+
+  /* Question Paper container styles */
+  .printable-paper-document {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .paper-exam-header {
+    border: 2px solid #000000 !important;
+    padding: 12px !important;
+    margin-bottom: 16px !important;
+    text-align: center !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .paper-section-block {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #333333 !important;
+    border-radius: 4px !important;
+  }
+
+  .paper-section-header {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+    padding: 6px 12px !important;
+    font-weight: bold !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .paper-question-row {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 8px 12px !important;
+  }
+
+  .paper-question-row:last-child {
+    border-bottom: none !important;
+  }
+
+  .paper-badge {
+    border: 1px solid #666666 !important;
+    background: transparent !important;
+    color: #000000 !important;
+    font-size: 8pt !important;
+    padding: 1px 4px !important;
+  }
+}
+
