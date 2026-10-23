@@ -215,7 +215,19 @@ export function parseGeminiError(err: any): {
   const status =
     err?.status ||
     err?.statusCode ||
-    (rawMsg.includes('503') ? 503 : rawMsg.includes('429') ? 429 : rawMsg.includes('401') ? 401 : rawMsg.includes('403') ? 403 : rawMsg.includes('404') ? 404 : 500);
+    (rawMsg.includes('503')
+      ? 503
+      : rawMsg.includes('429')
+      ? 429
+      : rawMsg.includes('401')
+      ? 401
+      : rawMsg.includes('403')
+      ? 403
+      : rawMsg.includes('404')
+      ? 404
+      : /timed? out|timeout/i.test(rawMsg)
+      ? 504
+      : 500);
 
   const isUnavailable =
     status === 503 ||
@@ -226,7 +238,8 @@ export function parseGeminiError(err: any): {
     /429|resource_exhausted|quota|rate limit/i.test(sanitized);
 
   const isNetwork =
-    /econnreset|etimedout|socket hang up|fetch failed|network timeout/i.test(sanitized);
+    status === 504 ||
+    /timed? out|timeout|deadline exceeded|econnreset|etimedout|socket hang up|fetch failed|network timeout/i.test(sanitized);
 
   const isAuth =
     status === 401 ||
@@ -812,7 +825,7 @@ export class GeminiService {
           );
 
           const prompt = buildSectionPrompt(input, section, currentStartIndex, allQuestions);
-          const TIMEOUT_MS = Math.min(parseInt(process.env.GEMINI_TIMEOUT_MS ?? '30000', 10), 30000);
+          const TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS ?? '45000', 10);
 
           const result = await withTimeout(
             this.client.models.generateContent({

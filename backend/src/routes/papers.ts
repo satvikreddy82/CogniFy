@@ -459,4 +459,123 @@ router.post('/:paperId/approve', authenticate, authorize(['dean']), async (req: 
   }
 });
 
+// ─── PATCH /api/v1/papers/:paperId/questions/:pqId — Edit a paper question instance
+// Edits the paper-specific copy of the question; never touches question_bank_entries source records.
+// Blocked when paper is approved or pending_review (requires Dean re-approval after edits).
+const editPaperQuestionSchema = z.object({
+  text: z.string().min(5, 'Question text must be at least 5 characters').optional(),
+  marks: z.number().int().min(1, 'Marks must be at least 1').optional(),
+  bloom_level: z.enum(['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']).optional(),
+  difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
+  co_id: z.string().optional(),
+});
+
+router.patch(
+  '/:paperId/questions/:pqId',
+  authenticate,
+  authorize(['faculty', 'admin']),
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+      const { paperId, pqId } = req.params;
+
+      // 1. Resolve paper
+      const paper = mockStore.papers.find((p) => p.id === paperId);
+      if (!paper) return res.status(404).json({ error: 'Paper not found' });
+
+      // 2. Ownership check — faculty may only edit their own papers; admin can edit any
+      if (req.user!.role === 'faculty' && paper.created_by !== req.user!.id) {
+        return res.status(403).json({ error: 'You are not authorised to edit this paper' });
+      }
+
+      // 3. Lock check — approved or pending_review papers are locked
+      const lockedStatuses = ['approved', 'pending_review'];
+      if (lockedStatuses.includes(paper.status)) {
+        return res.status(409).json({
+          error: `Paper is currently "${paper.status.replace(/_/g, ' ')}" and cannot be edited. ${
+            paper.status === 'pending_review'
+              ? 'Recall the submission first.'
+              : 'Contact the Dean to reopen it.'
+          }`,
+          code: 'PAPER_LOCKED',
+          status: paper.status,
+        });
+      }
+
+      // 4. Resolve the paper question instance
+      const pq = mockStore.paperQuestions.find((q) => q.id === pqId && q.paper_id === paperId);
+      if (!pq) {
+        return res.status(404).json({ error: 'Paper question not found in this paper' });
+      }
+
+      // 5. Validate the update payload
+      const updates = editPaperQuestionSchema.parse(req.body);
+      if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ error: 'No valid fields provided for update' });
+      }
+
+      // 6. Apply mark-change validation: new total must still match paper.total_marks
+      if (updates.marks !== undefined && updates.marks !== pq.marks) {
+        const otherQsTotal = mockStore.paperQuestions
+          .filter((q) => q.paper_id === paperId && q.id !== pqId)
+          .reduce((s: number, q: any) => s + (Number(q.marks) || 0), 0);
+        const newTotal = otherQsTotal + updates.marks;
+        if (newTotal !== paper.total_marks) {
+          return res.status(422).json({
+            error: `Changing this question to ${updates.marks} marks would make the paper total ${newTotal}, which does not match the configured total of ${paper.total_marks} marks.`,
+            code: 'MARKS_MISMATCH',
+            new_total: newTotal,
+            expected_total: paper.total_marks,
+          });
+        }
+      }
+
+      // 7. Persist the edit — update question_bank_entries (inline copy) and pq-level fields
+      if (updates.marks !== undefined) pq.marks = updates.marks;
+
+      // question_bank_entries is an inline JSON blob on the paper question record
+      if (!pq.question_bank_entries) pq.question_bank_entries = {};
+      if (updates.text !== undefined) {
+        pq.question_bank_entries.text = updates.text;
+        pq.question_bank_entries.question_text = updates.text;
+      }
+      if (updates.marks !== undefined) pq.question_bank_entries.marks = updates.marks;
+      if (updates.bloom_level !== undefined) pq.question_bank_entries.bloom_level = updates.bloom_level;
+      if (updates.difficulty !== undefined) pq.question_bank_entries.difficulty = updates.difficulty;
+      if (updates.co_id !== undefined) pq.question_bank_entries.co_id = updates.co_id;
+
+      // 8. Mark paper as needing re-validation after edit
+      if (paper.status === 'validation_required' || paper.status === 'changes_requested' || paper.status === 'draft') {
+        paper.status = 'validation_required';
+      }
+
+      // Audit log
+      mockStore.auditLogs.unshift({
+        id: 'log-' + Date.now(),
+        actor_id: req.user!.id,
+        action: 'paper_question_edited',
+        target_table: 'paper_questions',
+        target_id: pqId,
+        details: { paper_id: paperId, fields_updated: Object.keys(updates) },
+        created_at: new Date().toISOString(),
+      });
+
+      // 9. Return updated question and paper totals summary
+      const allPqs = mockStore.paperQuestions.filter((q) => q.paper_id === paperId);
+      const newPaperTotal = allPqs.reduce((s: number, q: any) => s + (Number(q.marks) || 0), 0);
+
+      return res.json({
+        message: 'Question updated successfully',
+        paper_question: pq,
+        paper_total_marks: newPaperTotal,
+        paper_status: paper.status,
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ error: 'Invalid update data', details: err.errors });
+      }
+      next(err);
+    }
+  },
+);
+
 export default router;

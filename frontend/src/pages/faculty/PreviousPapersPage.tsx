@@ -258,7 +258,7 @@ export default function PreviousPapersPage() {
       {/* Complete Question Paper Preview Modal */}
       {selectedPaperId && fullPaper && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 print:p-0 print:bg-white print:static">
-          <div className="relative w-full max-w-4xl bg-surface rounded-brand-lg shadow-2xl border border-default my-8 overflow-hidden print:border-none print:shadow-none print:m-0 print:max-w-none">
+          <div className="relative w-full max-w-[95vw] bg-surface rounded-brand-lg shadow-2xl border border-default my-4 overflow-hidden print:border-none print:shadow-none print:m-0 print:max-w-none">
             {/* Modal Header (hidden on print) */}
             <div className="no-print flex items-center justify-between px-6 py-4 border-b border-default bg-surface-2">
               <div className="flex items-center gap-2">
@@ -275,8 +275,22 @@ export default function PreviousPapersPage() {
             </div>
 
             {/* Modal Body: Render Full Printable Document */}
-            <div className="p-6 max-h-[80vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-0">
-              <QuestionPaperDocument paper={fullPaper} showActions={true} onClose={handleCloseModal} />
+            <div className="p-4 max-h-[82vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-0">
+              <QuestionPaperDocument
+                paper={fullPaper}
+                showActions={true}
+                onClose={handleCloseModal}
+                editable={fullPaper?.status !== 'approved' && fullPaper?.status !== 'pending_review'}
+                onQuestionUpdated={(updatedPq, newPaperStatus) => {
+                  setFullPaper((prev: any) => {
+                    if (!prev) return prev;
+                    const updatedPqs = (prev.paper_questions || []).map((pq: any) =>
+                      pq.id === updatedPq.id ? { ...pq, ...updatedPq } : pq
+                    );
+                    return { ...prev, paper_questions: updatedPqs, status: newPaperStatus };
+                  });
+                }}
+              />
             </div>
           </div>
         </div>

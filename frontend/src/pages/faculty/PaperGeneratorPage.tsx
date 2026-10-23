@@ -186,7 +186,7 @@ export default function PaperGeneratorPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in pb-12">
+    <div className="max-w-6xl mx-auto space-y-6 animate-fade-in pb-12">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-default tracking-tight">Question Paper Generator</h1>
@@ -889,6 +889,16 @@ export default function PaperGeneratorPage() {
               paper_questions: generatedPaper?.paper_questions || [],
             }}
             showActions={true}
+            editable={true}
+            onQuestionUpdated={(updatedPq, newPaperStatus) => {
+              setGeneratedPaper((prev: any) => {
+                if (!prev) return prev;
+                const updatedPqs = (prev.paper_questions || []).map((pq: any) =>
+                  pq.id === updatedPq.id ? { ...pq, ...updatedPq } : pq
+                );
+                return { ...prev, paper_questions: updatedPqs, status: newPaperStatus };
+              });
+            }}
           />
         </div>
       )}
